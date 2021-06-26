@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BookService from "../services/Book.service";
 import '../assets/css/Home.css';
+import Header from "../components/Header";
 
 const Home = () => {
 
@@ -18,7 +19,9 @@ const Home = () => {
 
   return (
     <div className="page-container">
-      <p> page d'accueil </p>
+      <Header />
+      <p>La librairie toujour ouverte !</p>
+      <p>Trouve ton livre d'Henri Potier avec nous</p>
     </div>
   );
 };

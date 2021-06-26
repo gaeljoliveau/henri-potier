@@ -1,5 +1,11 @@
 .page-container{
-  background-color: #F19F50;
-  width: 100%;
-  height: 100%;
+  background-color: #f19e50d0;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  min-height: 100vh;
+}
+
+.text{
+  font-family: "Imstory";
 }

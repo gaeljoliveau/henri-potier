@@ -1,0 +1,36 @@
+.header-wrapper{
+  padding-top: 20px;
+  justify-content: space-between;
+}
+
+.inline{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header-logo{
+  max-width: 80px;
+  max-height: 80px;
+  padding-left: 80px;
+  padding-right: 20px;
+}
+
+p{
+  font-family: "Imstory";
+  font-size: 25px;
+  color: #443637;
+}
+
+.header-title{
+  font-size: 40px;
+}
+
+
+
+.basket-logo{
+  max-width: 40px;
+  max-height: 40px;
+  padding-right: 100px;
+  padding-left: 30px;
+}
