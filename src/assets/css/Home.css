@@ -4,6 +4,7 @@
   flex-direction: column;
   padding-right: 100px;
   padding-left: 100px;
+  min-height: 100vh;
 }
 
 .inline{
@@ -29,7 +30,8 @@
 
 .cards-container{
   display: flex;
-
+  flex-direction: row;
+  overflow:scroll;
   background-color: white;
   border-radius: 20px;
   padding-top: 40px;
