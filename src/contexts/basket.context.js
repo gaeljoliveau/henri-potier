@@ -34,7 +34,8 @@ const reducer = (state, mutation) => {
         
         
       case "empty_basket":
-        return { ...state, initialState };
+        console.log('emptying basket');
+        return { ...state, basket: [] };
       default:
         return state;
   }

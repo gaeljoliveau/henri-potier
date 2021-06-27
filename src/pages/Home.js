@@ -70,7 +70,7 @@ const Home = () => {
                 <img src={book.cover} className="book-cover" alt={`couverture du livre ${book.title}`}/>
                 <p className="text">{book.title}</p>
                 <div className="inline price-buy-container">
-                  <p className="text price-text">Prix : <span className="price-value">{book.price} €</span></p>
+                  <p className="text price-text">Prix : <span className="value-number">{book.price} €</span></p>
                   <Link id={book.isbn} className="text button" onClick={(e) => addToBasket(e.target.id)}> Acheter </Link>
                 </div>
                 

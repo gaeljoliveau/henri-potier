@@ -30,6 +30,7 @@ p{
 
 .search-container{
   justify-content: center;
+
 }
 
 .search-input{
@@ -42,6 +43,8 @@ p{
   padding-left: 20px;
   padding-right: 20px;
   flex: 1;
+  font-family: "Pumpkin Pancakes";
+  font-size: 20px;
 }
 
 .search-button{
@@ -89,8 +92,9 @@ p{
   font-size: 19px;
 }
 
-.price-value{
-  font-family:'Times New Roman', Times, serif;
+.value-number{
+  font-family: "Pumpkin Pancakes";
+  font-size: 25px;
 }
 
 .price-buy-container{

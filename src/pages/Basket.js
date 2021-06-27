@@ -9,7 +9,7 @@ import trash from '../assets/img/trash.svg';
 const Basket = () => {
   const [promotions, setPromotions] = useState([]);
   const [basketAmount, setBasketAmount] = useState(0);
-  const {state}  = useContext(BasketContext);
+  const {state, dispatch}  = useContext(BasketContext);
 
   useEffect(() => {
     setBasketAmount(state.basket.reduce((tot, book)=> (tot + book.price * book.amount),0))
@@ -68,7 +68,11 @@ const Basket = () => {
       <div className="title-delete-container">
         <p className="text">Votre pannier </p>
         <p className="text">Montant : {basketAmount}€</p>
-        <Link className="inline">
+        <Link className="inline" onClick={() => {
+              setPromotions([]);
+              setBasketAmount(0);
+              dispatch({type: "empty_basket"})
+            }}>
           <p className="text">Vider le pannier</p>
           <img className="empty-basket-icon" src={trash} alt="Vider le pannier"/>
         </Link>
@@ -92,7 +96,7 @@ const Basket = () => {
               </div>
               <div className="synopsis-container">
                 <p className="text">Résumé</p>
-                <p>{book.synopsis[0]}</p>
+                <p className="sub-text">{book.synopsis[0]}</p>
               </div>
             </div>  
           )
@@ -105,17 +109,17 @@ const Basket = () => {
           <p className="text">Promotions disponible :</p>
           {
             promotions.length === 0 ?
-              <p className="text">Pas de promotion disponnible car votre pannier est vide</p>
+              <p className="sub-text">Pas de promotion disponnible car votre pannier est vide</p>
             :promotions.map((promotion, index) => {
               switch (promotion.type) {
                 case "percentage": 
-                  return(<p key={'promotion'+index}>{promotion.value}% de réduction sur votre pannier soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(promotion.reductionAmount)}</p>)
+                  return(<p className="sub-text" key={'promotion'+index}>{promotion.value}% de réduction sur votre pannier soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(promotion.reductionAmount)}</p>)
                 case "minus":
-                  return(<p key={'promotion'+index}>{promotion.value}€ de réduction sur votre pannier</p>)
+                  return(<p className="sub-text" key={'promotion'+index}>{promotion.value}€ de réduction sur votre pannier</p>)
                 case "slice":
-                  return(<p key={'promotion'+index}>{promotion.value}€ offerts par tanche de {promotion.sliceValue}€ d'achats soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(promotion.reductionAmount)}</p>)
+                  return(<p className="sub-text" key={'promotion'+index}>{promotion.value}€ offerts par tanche de {promotion.sliceValue}€ d'achats soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(promotion.reductionAmount)}</p>)
                 default :
-                  return(<p key={'promotion'+index}>type de promotion inconnu : {promotion.type}</p>)
+                  return(<p className="sub-text" key={'promotion'+index}>type de promotion inconnu : {promotion.type}</p>)
               }
             })
           }
@@ -124,8 +128,8 @@ const Basket = () => {
             promotions.length === 0 ? null :
             <div className="best-promotion-container">
               <p className="text">Meilleure promotion disponible</p>
-              <p> {showBestPromotion() } </p>
-              <p>Montant du pannier après réduction : { new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(basketAmount - getBestPromotion().reductionAmount)}</p>
+              <p className="sub-text"> {showBestPromotion() } </p>
+              <p className="sub-text">Montant du pannier après réduction : { new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(basketAmount - getBestPromotion().reductionAmount)}</p>
             </div>
           }
       </div>

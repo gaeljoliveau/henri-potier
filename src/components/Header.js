@@ -19,7 +19,7 @@ const Header = () => {
       </Link>
 
       <Link className="inline bloc-right" to='/basket'>
-        <p className="text" >Pannier {state.basket.reduce((tot, book)=> (tot + book.amount),0)}</p>
+        <p className="text" >Pannier : <span className="value-number">{state.basket.reduce((tot, book)=> (tot + book.amount),0)}</span> article(s)</p>
         <img className="basket-logo" src={Basket} alt="pannier" />
       </Link>
 
