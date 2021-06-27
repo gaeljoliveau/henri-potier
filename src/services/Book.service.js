@@ -14,7 +14,8 @@ export default class BookService {
     return response;
   }
 
-  static async getBookPromotions(isbns) {
+  static async getBooksPromotions(isbns) {
+    console.log(isbns);
     let init = {
       method: "GET",
       headers: {
@@ -22,7 +23,7 @@ export default class BookService {
       },
     }
 
-    let call = await fetch(`${APIUrl}/books/${isbns.join(',')}/commercialOffers`, init);
+    let call = await fetch(`${APIUrl}/${isbns.join(',')}/commercialOffers`, init);
     let response = await call.json();
     return response;
   }

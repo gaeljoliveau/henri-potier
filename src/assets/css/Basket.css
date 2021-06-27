@@ -1,0 +1,38 @@
+.title-delete-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.empty-basket-icon {
+  margin-left: 20px;
+  max-width: 40px;
+  max-height: 40px;
+}
+
+.book-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+
+.book-basket-container {
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 40px;
+  margin-top: 40px;
+}
+
+.synopsis-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding-left: 20px;
+}
+
+

@@ -18,10 +18,10 @@ const Header = () => {
         <p className="header-title" >Blibrary</p>
       </Link>
 
-      <div className="inline bloc-right">
-        <p className="text" >Pannier {state.basket.length}</p>
+      <Link className="inline bloc-right" to='/basket'>
+        <p className="text" >Pannier {state.basket.reduce((tot, book)=> (tot + book.amount),0)}</p>
         <img className="basket-logo" src={Basket} alt="pannier" />
-      </div>
+      </Link>
 
     </div>
   );

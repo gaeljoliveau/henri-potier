@@ -6,6 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { BasketProvider } from "./contexts/basket.context";
+import Basket from "./pages/Basket";
 
 //Component page
 import Home from "./pages/Home";
@@ -18,6 +19,7 @@ const App = () => {
       <Router>
         <Switch>
           <Route path="/" exact component={Home}/>
+          <Route path="/basket" component={Basket}/>
           <Route path="/404" component={NotFound} />
           <Redirect to="/404" />
         </Switch>
