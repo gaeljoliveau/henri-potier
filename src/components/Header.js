@@ -9,7 +9,7 @@ import { BasketContext } from "../contexts/basket.context";
 
 const Header = () => {
 
-  const {state, dispatch}  = useContext(BasketContext);
+  const {state}  = useContext(BasketContext);
 
   return (
     <div className="header-wrapper inline">

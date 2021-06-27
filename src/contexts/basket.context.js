@@ -24,7 +24,7 @@ const reducer = (state, mutation) => {
           console.log('ajout d un exemplaire supplémantaire dans le pannier');
 
           const book = {...bookFound};
-          let newBasket = state.basket.filter((book) => book.isbn != bookFound.isbn);
+          let newBasket = state.basket.filter((book) => book.isbn !== bookFound.isbn);
           book.amount ++;
           
           return { ...state, basket: [...newBasket, book] }

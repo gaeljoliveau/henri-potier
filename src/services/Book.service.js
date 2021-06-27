@@ -15,7 +15,6 @@ export default class BookService {
   }
 
   static async getBooksPromotions(isbns) {
-    console.log(isbns);
     let init = {
       method: "GET",
       headers: {

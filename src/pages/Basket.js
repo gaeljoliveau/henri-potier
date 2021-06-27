@@ -9,23 +9,25 @@ import trash from '../assets/img/trash.svg';
 const Basket = () => {
   const [promotions, setPromotions] = useState([]);
   const [basketAmount, setBasketAmount] = useState(0);
-  const {state, dispatch}  = useContext(BasketContext);
+  const {state}  = useContext(BasketContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      let response = await BookService.getBooksPromotions(state.basket.map(book => book.isbn));
-      console.log(response.offers);
-      console.log('promotions recieved');
-      setPromotions(response.offers);
-    }
-
-    if(state.basket.length != 0)
-      fetchData();
-    
     setBasketAmount(state.basket.reduce((tot, book)=> (tot + book.price * book.amount),0))
   }, []);
 
+  useEffect(()=> {
+    const fetchData = async () => {
+      let response = await BookService.getBooksPromotions(state.basket.map(book => book.isbn));
+      setPromotions(response.offers.map((promotion) =>  ({...promotion, reductionAmount : calculateReductionAmount(promotion)}) ));
+      console.log(promotions);
+    }
+    
+    if(state.basket.length !== 0 && basketAmount !==0)
+      fetchData();
+  }, [basketAmount])
+
   const calculateReductionAmount = (promotion) => {
+    console.log(promotion, basketAmount);
     switch (promotion.type) {
       case "percentage": 
         return(promotion.value / 100 * basketAmount);
@@ -35,6 +37,28 @@ const Basket = () => {
         return(~~(basketAmount / promotion.sliceValue ) * promotion.value)
       default :
         return(0)
+    }
+  }
+
+  const getBestPromotion = () =>{
+    const max = promotions.reduce(function(prev, current) {
+      return (prev.reductionAmount > current.reductionAmount) ? prev : current
+    })
+    console.log(max);
+    return max;
+  }
+
+  const showBestPromotion = () => {
+    const best = getBestPromotion()
+    switch(best.type) {
+      case "percentage": 
+        return(<p>{best.value}% de réduction sur votre pannier soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(best.reductionAmount)}</p>)
+      case "minus":
+        return(<p>{best.value}€ de réduction sur votre pannier</p>)
+      case "slice":
+        return(<p>{best.value}€ offerts par tanche de {best.sliceValue}€ d'achats soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(best.reductionAmount)}</p>)
+      default :
+        return(<p>type de promotion inconnu : {best.type}</p>)
     }
   }
 
@@ -75,30 +99,35 @@ const Basket = () => {
         })
       }
 
-      <p className="text">Promotions disponnibles</p>
+      <p className="text promotions-title">Promotions</p>
       <div className="promotions-container">
-        {
-          promotions.length === 0 ?
-            <p className="text">Pas de promotion disponnible car votre pannier est vide</p>
-            :promotions.map((promotion) => {
+        <div className="promotions-list-container">
+          <p className="text">Promotions disponible :</p>
+          {
+            promotions.length === 0 ?
+              <p className="text">Pas de promotion disponnible car votre pannier est vide</p>
+            :promotions.map((promotion, index) => {
               switch (promotion.type) {
                 case "percentage": 
-                  return(<p>{promotion.value}% de réduction sur votre pannier soit {calculateReductionAmount(promotion)}€</p>)
+                  return(<p key={'promotion'+index}>{promotion.value}% de réduction sur votre pannier soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(promotion.reductionAmount)}</p>)
                 case "minus":
-                  return(<p>{promotion.value}€ de réduction sur votre pannier</p>)
+                  return(<p key={'promotion'+index}>{promotion.value}€ de réduction sur votre pannier</p>)
                 case "slice":
-                  return(<p>{promotion.value}€ offerts par tanche de {promotion.sliceValue}€ d'achats soit {calculateReductionAmount(promotion)}€</p>)
+                  return(<p key={'promotion'+index}>{promotion.value}€ offerts par tanche de {promotion.sliceValue}€ d'achats soit {new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(promotion.reductionAmount)}</p>)
                 default :
-                  return(<p>type de promotion inconnu : {promotion.type}</p>)
+                  return(<p key={'promotion'+index}>type de promotion inconnu : {promotion.type}</p>)
               }
-
-
-              return(
-                <p>type : {promotion.type}</p>
-              )
-              
             })
-        }
+          }
+        </div>
+        {
+            promotions.length === 0 ? null :
+            <div className="best-promotion-container">
+              <p className="text">Meilleure promotion disponible</p>
+              <p> {showBestPromotion() } </p>
+              <p>Montant du pannier après réduction : { new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(basketAmount - getBestPromotion().reductionAmount)}</p>
+            </div>
+          }
       </div>
       
     </div>
