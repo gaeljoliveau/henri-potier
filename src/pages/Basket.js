@@ -67,7 +67,7 @@ const Basket = () => {
       <Header />
       <div className="title-delete-container">
         <p className="text">Votre pannier </p>
-        <p className="text">Montant : {basketAmount}€</p>
+        <p className="text">Montant : <span className="value-number">{basketAmount}€</span></p>
         <Link className="inline" onClick={() => {
               setPromotions([]);
               setBasketAmount(0);
