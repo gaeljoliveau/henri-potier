@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import BookService from "../services/Book.service";
 import '../assets/css/Home.css';
 import Header from "../components/Header";
@@ -11,14 +11,15 @@ const Home = () => {
 
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [reserchFilter, setResearchFilter] = useState([]);
+  const [filter, setFilter] = useState([]);
   const {state, dispatch}  = useContext(BasketContext);
 
   useEffect(() => {
     const fetchData = async () => {
       let response = await BookService.getBooks();
       setBooks(response);
-      setFilteredBooks(books);
+      setFilteredBooks(response);
+      console.log('response recieved');
     }
 
     fetchData();
@@ -33,6 +34,18 @@ const Home = () => {
     console.log(state.basket);
   }
 
+  const editFilter = (newFilter) => {
+    console.log(newFilter);
+    setFilter(newFilter)
+  }
+
+  const searchBooks = () => {
+    console.log('searched \'' + filter +'\'');
+    setFilteredBooks(books.filter((book) => {
+      return(book.title.toLowerCase().includes(filter.toLowerCase()));
+    }));
+    console.log(filteredBooks.length);
+  }
 
   return (
     <div className="page-container">
@@ -42,8 +55,8 @@ const Home = () => {
           <p className="catchphrase"> La librairie toujours ouverte !</p>
           <p className="catchphrase">Trouve ton livre d'Henri Potier au meilleur prix avec nous</p>
           <div className="search inline search-container">
-            <input className="search-input" placeholder="Recherche ton livre d'Henri Pottier"></input>
-            <Link className="search-button"><img className="search-button" src={magnifier}/></Link>
+            <input className="search-input" placeholder="Recherche ton livre d'Henri Pottier" onChange={(e) => editFilter(e.target.value)}></input>
+            <Link className="search-button" to='' onClick={searchBooks}><img className="search-button" src={magnifier}/></Link>
           </div>
         </div>
         <img className="illustration" src={reading} alt="pannier" />
@@ -51,7 +64,7 @@ const Home = () => {
 
       <div className="cards-container">
         {
-          books.map((book)=>{
+          filteredBooks.map((book)=>{
             return(
               <div key={book.isbn} className="card">
                 <img src={book.cover} className="book-cover" alt={`couverture du livre ${book.title}`}/>
@@ -67,8 +80,6 @@ const Home = () => {
           })
         }
       </div>
-
-      <div> basket {state.basket}</div>
 
     </div>
   );
