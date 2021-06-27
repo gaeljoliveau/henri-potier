@@ -10,13 +10,10 @@
   padding-right: 20px;
 }
 
-p{
-  font-family: "Imstory";
-  font-size: 25px;
-  color: #443637;
-}
+
 
 .header-title{
+  font-family: "Imstory";
   font-size: 40px;
 }
 
