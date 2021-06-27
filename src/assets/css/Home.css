@@ -63,6 +63,12 @@ p{
   padding-top: 25px;
   padding-bottom: 25px;
   height: min-content;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  
 }
 
 .card {
@@ -72,6 +78,9 @@ p{
   padding-top: 25px;
   padding-bottom: 25px;
   height: 100%;
+  flex: 1;
+  margin-right: 100px;
+  margin-left: 100px;
 }
 
 

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useReducer } from "react";
 import BookService from "../services/Book.service";
 import '../assets/css/Home.css';
 import Header from "../components/Header";
 import reading from '../assets/img/reading.svg';
 import magnifier from '../assets/img/magnifier.svg';
 import { Link } from "react-router-dom";
+import { BasketContext, initialState } from "../contexts/basket.context";
 
 const Home = () => {
 
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [reserchFilter, setResearchFilter] = useState([]);
+  const {state, dispatch}  = useContext(BasketContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +24,14 @@ const Home = () => {
     fetchData();
   }, []);
 
-
+  const addToBasket = (bookisbn) => {
+    console.log(bookisbn);
+    dispatch({
+      type: "add_book",
+      payload: [bookisbn]
+    })
+    console.log(state.basket);
+  }
 
 
   return (
@@ -40,16 +49,16 @@ const Home = () => {
         <img className="illustration" src={reading} alt="pannier" />
       </div>
 
-      <div className="inline cards-container">
+      <div className="cards-container">
         {
-          books.slice(0,4).map((book)=>{
+          books.map((book)=>{
             return(
-              <div className="card">
+              <div key={book.isbn} className="card">
                 <img src={book.cover} className="book-cover" alt={`couverture du livre ${book.title}`}/>
                 <p className="text">{book.title}</p>
                 <div className="inline price-buy-container">
                   <p className="text price-text">Prix : <span className="price-value">{book.price} €</span></p>
-                  <Link className="text button"> Acheter </Link>
+                  <Link id={book.isbn} className="text button" onClick={(e) => addToBasket(e.target.id)}> Acheter </Link>
                 </div>
                 
               </div>
@@ -58,6 +67,8 @@ const Home = () => {
           })
         }
       </div>
+
+      <div> basket {state.basket}</div>
 
     </div>
   );
