@@ -8,23 +8,42 @@ import trash from '../assets/img/trash.svg';
 
 const Basket = () => {
   const [promotions, setPromotions] = useState([]);
+  const [basketAmount, setBasketAmount] = useState(0);
   const {state, dispatch}  = useContext(BasketContext);
 
   useEffect(() => {
     const fetchData = async () => {
       let response = await BookService.getBooksPromotions(state.basket.map(book => book.isbn));
-      setPromotions(response);
+      console.log(response.offers);
       console.log('promotions recieved');
+      setPromotions(response.offers);
     }
+
     if(state.basket.length != 0)
       fetchData();
+    
+    setBasketAmount(state.basket.reduce((tot, book)=> (tot + book.price * book.amount),0))
   }, []);
+
+  const calculateReductionAmount = (promotion) => {
+    switch (promotion.type) {
+      case "percentage": 
+        return(promotion.value / 100 * basketAmount);
+      case "minus":
+        return(promotion.value)
+      case "slice":
+        return(~~(basketAmount / promotion.sliceValue ) * promotion.value)
+      default :
+        return(0)
+    }
+  }
 
   return(
     <div className="page-container">
       <Header />
       <div className="title-delete-container">
         <p className="text">Votre pannier </p>
+        <p className="text">Montant : {basketAmount}€</p>
         <Link className="inline">
           <p className="text">Vider le pannier</p>
           <img className="empty-basket-icon" src={trash} alt="Vider le pannier"/>
@@ -32,7 +51,7 @@ const Basket = () => {
       </div>
 
       {
-        state.basket.length === 0 ? 
+        state.basket.length == 0 ? 
           <div className="book-basket-container" > 
             <p className="text">Votre pannier est vide</p>
           </div>
@@ -57,10 +76,30 @@ const Basket = () => {
       }
 
       <p className="text">Promotions disponnibles</p>
+      <div className="promotions-container">
+        {
+          promotions.length === 0 ?
+            <p className="text">Pas de promotion disponnible car votre pannier est vide</p>
+            :promotions.map((promotion) => {
+              switch (promotion.type) {
+                case "percentage": 
+                  return(<p>{promotion.value}% de réduction sur votre pannier soit {calculateReductionAmount(promotion)}€</p>)
+                case "minus":
+                  return(<p>{promotion.value}€ de réduction sur votre pannier</p>)
+                case "slice":
+                  return(<p>{promotion.value}€ offerts par tanche de {promotion.sliceValue}€ d'achats soit {calculateReductionAmount(promotion)}€</p>)
+                default :
+                  return(<p>type de promotion inconnu : {promotion.type}</p>)
+              }
 
-      {
-        
-      }
+
+              return(
+                <p>type : {promotion.type}</p>
+              )
+              
+            })
+        }
+      </div>
       
     </div>
     
