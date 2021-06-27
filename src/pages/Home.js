@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import reading from '../assets/img/reading.svg';
 import magnifier from '../assets/img/magnifier.svg';
 import { Link } from "react-router-dom";
-import { BasketContext, initialState } from "../contexts/basket.context";
+import { BasketContext } from "../contexts/basket.context";
 
 const Home = () => {
 
@@ -26,16 +26,15 @@ const Home = () => {
   }, []);
 
   const addToBasket = (bookisbn) => {
-    console.log(bookisbn);
     dispatch({
       type: "add_book",
-      payload: [bookisbn]
+      payload: books.find((book) => {
+        return book.isbn === bookisbn;
+      })
     })
-    console.log(state.basket);
   }
 
   const editFilter = (newFilter) => {
-    console.log(newFilter);
     setFilter(newFilter)
   }
 
@@ -44,7 +43,6 @@ const Home = () => {
     setFilteredBooks(books.filter((book) => {
       return(book.title.toLowerCase().includes(filter.toLowerCase()));
     }));
-    console.log(filteredBooks.length);
   }
 
   return (
@@ -64,7 +62,9 @@ const Home = () => {
 
       <div className="cards-container">
         {
-          filteredBooks.map((book)=>{
+          filteredBooks.length === 0? 
+            <p className="text">Aucun livre dont le titre contient "{filter}"</p>
+          :filteredBooks.map((book)=>{
             return(
               <div key={book.isbn} className="card">
                 <img src={book.cover} className="book-cover" alt={`couverture du livre ${book.title}`}/>

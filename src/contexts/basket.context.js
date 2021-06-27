@@ -10,10 +10,29 @@ const BasketContext = createContext({
 });
 
 const reducer = (state, mutation) => {
-  console.log("reduced");
+  console.log(state.basket);
   switch (mutation.type) {
+    
       case "add_book":
-        return { ...state, basket: mutation.payload };
+        let newBook = mutation.payload
+        if(!newBook.amount){
+          newBook.amount = 1;
+        }
+
+        let bookFound = state.basket.find((book) => book.isbn === newBook.isbn)
+        if (bookFound){
+          console.log('ajout d un exemplaire supplémantaire dans le pannier');
+
+          const book = {...bookFound};
+          let newBasket = state.basket.filter((book) => book.isbn != bookFound.isbn);
+          book.amount ++;
+          
+          return { ...state, basket: [...newBasket, book] }
+        }else{
+          return { ...state, basket: [...state.basket, newBook] };
+        }
+        
+        
       case "empty_basket":
         return { ...state, initialState };
       default:
