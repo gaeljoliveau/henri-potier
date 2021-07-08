@@ -90,8 +90,8 @@ const Basket = () => {
                 <img src={book.cover} className="book-cover" alt={`couverture du livre ${book.title}`}/>
                 <div className="book-info-container">
                   <p className="text">{book.title}</p>
-                  <p className="text">Prix unitaire : <span className="price-value">{book.price} €</span></p>
-                  <p className="text">Nombre : <span className="price-value">{book.amount}</span></p>
+                  <p className="text">Prix unitaire : <span className="value-number">{book.price} €</span></p>
+                  <p className="text">Nombre : <span className="value-number">{book.amount}</span></p>
                 </div>
               </div>
               <div className="synopsis-container">
